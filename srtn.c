@@ -25,12 +25,12 @@ int main() {
         n++;                                        // contador de processos
         if(feof(entrada)) break;                    // se chegar ao final do arquivo sai do loop
     }
+   
+    fclose(entrada);                                // não precisa mais do arquivo de entrada 
     
     saida = fopen("out.txt", "w");                  // abre arquivo de saída para escrever os resultados
-
     fprintf(saida, "teste");                        // escreve no arquivo de saída
-
-    fclose(entrada);                                // não precisa mais do arquivo de entrada
     fclose(saida);                                  // não precisa mais do arquivo de saída
+    
     return 0;
 }
