@@ -2,9 +2,13 @@
 #include <stdlib.h>
 
 struct processo {
+    int pid;        // identificação do processo
     int criacao;    // data de criação
     int duracao;    // duração em segundos
     int prioridade; // prioridade estática (não importa para o srtn)
+    int vida;       // tempo médio de vida
+    int espera;     // tempo médio de espera
+    int trocas;     // número de trocas de contexto
 };
 
 int main() {
@@ -22,6 +26,7 @@ int main() {
         fscanf(entrada, "%d", &p[i].criacao);
         fscanf(entrada, "%d", &p[i].duracao);
         fscanf(entrada, "%d", &p[i].prioridade);
+        p[i].pid = i+1;                             // adiciona uma identificação ao processo
         n++;                                        // contador de processos
         if(feof(entrada)) break;                    // se chegar ao final do arquivo sai do loop
     }
