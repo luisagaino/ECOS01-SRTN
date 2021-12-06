@@ -46,12 +46,18 @@ int main() {
     }
     fprintf(saida, "\n");
 
-    //while(completos != n) {                         // enquanto ainda há processos que não foram completados
+    while(completos != n) {                         // enquanto ainda há processos que não foram completados
         int atual = escolheProcesso(n, tempo, p, finalizados, tempoRestante);
         imprimeDiagrama(saida, tempo, atual, n);
-        /*COMPLETAR*/
-    //}
-
+        /*
+          precisa "executar" os processos (aumenta o contador de tempo e diminui o tempo restante do processo)
+          e outros detalhezinhos (contar o número de trocas de contexto e etc)
+          parâmetros que precisam ser impressos:
+          tempo de vida = tempo de finalização - tempo de criação
+          tempo de espera = tempo de vida - tempo de duração
+        */
+    }
+    
     // escrevendo no arquivo de saída
     fprintf(saida, "\n|    | Tempo de vida | Tempo de espera |\n");
     for(int i = 0; i < n; i++) {
