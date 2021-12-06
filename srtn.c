@@ -10,7 +10,7 @@ struct processo {
 };
 
 int escolheProcesso(int n, int tempo, struct processo p[10], int finalizados[10], int tempoRestante[10]);
-void imprimeDiagrama(FILE *saida, int tempo, int atual, int n);
+void imprimeDiagrama(FILE *saida, int tempo, int atual, int n, struct processo p[10], int finalizados[10]);
 
 int main() {
     FILE *entrada, *saida;                          // arquivos de entrada e saida
@@ -47,7 +47,7 @@ int main() {
     int completos = 0;                              // contador de processos completos
     while(completos != n) {                         // enquanto ainda há processos que não foram completados
         atual = escolheProcesso(n, tempo, p, finalizados, tempoRestante);
-        imprimeDiagrama(saida, tempo, atual, n);
+        imprimeDiagrama(saida, tempo, atual, n, p, finalizados);
         
         if(atual != anterior) trocas++;             // se o processo anterior é diferente do atual é porque teve troca de contexto
 
@@ -110,7 +110,7 @@ int escolheProcesso(int n, int tempo, struct processo p[10], int finalizados[10]
 }
 
 // imprime o diagrama de tempo de execução
-void imprimeDiagrama(FILE *saida, int tempo, int atual, int n) {
+void imprimeDiagrama(FILE *saida, int tempo, int atual, int n, struct processo p[10], int finalizados[10]) {
     if(tempo < 10) {
         if(tempo + 1 < 10)
             fprintf(saida, " %d- %d   ", tempo, tempo+1);
@@ -123,7 +123,10 @@ void imprimeDiagrama(FILE *saida, int tempo, int atual, int n) {
         if(atual == i)
             fprintf(saida, "##  ");
         else
-            fprintf(saida, "--  ");
+            if((p[i].criacao <= tempo) && (finalizados[i] == 0))
+                fprintf(saida, "--  ");
+            else
+                fprintf(saida, "    ");
     }
     fprintf(saida, "\n");
 }
