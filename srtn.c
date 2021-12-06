@@ -88,6 +88,7 @@ int escolheProcesso(int n, int tempo, struct processo p[10], int finalizados[10]
     return atual;
 }
 
+// imprime o diagrama de tempo de execução
 void imprimeDiagrama(FILE *saida, int tempo, int atual, int n) {
     if(tempo < 10) {
         if(tempo + 1 < 10) {
