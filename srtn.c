@@ -49,15 +49,17 @@ int main() {
         atual = escolheProcesso(n, tempo, p, finalizados, tempoRestante);
         imprimeDiagrama(saida, tempo, atual, n);
         
-        if(atual != anterior) trocas++;
+        if(atual != anterior) trocas++;             // se o processo anterior é diferente do atual é porque teve troca de contexto
 
         if(atual != -1) {                           // se há um processo em execução
             tempoRestante[atual]--;                 // diminui o tempo restante do processo atual
             tempo++;                                // aumenta o contador de tempo
             if(tempoRestante[atual] == 0) {         // se o processo foi finalizado
+                // tempo de vida = tempo atual - data de criação 
                 p[atual].vida = tempo - p[atual].criacao;
+                // tempo de espera = tempo de vida - tempo de duração
                 p[atual].espera = p[atual].vida - p[atual].duracao;
-                finalizados[atual] = 1;
+                finalizados[atual] = 1;             // adiciona na lista de finalizados
                 completos++;
             }
         } else tempo++;                             // aumenta o contador de tempo
