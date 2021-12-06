@@ -16,7 +16,6 @@ int main() {
     FILE *entrada, *saida;                          // arquivos de entrada e saida
     struct processo p[10];                          // teremos até 10 processos nessa simulação
     int trocas = 0;                                 // número de trocas de contexto
-    int completos = 0;                              // quantidade de processos completos
     int tempo = 0;                                  // contador de tempo
 
     entrada = fopen("in.txt", "r");                 // abre arquivo de entrada para ler os dados
@@ -41,27 +40,41 @@ int main() {
     
     saida = fopen("out.txt", "w");                  // abre arquivo de saída para escrever os resultados
     fprintf(saida, "tempo   ");
-    for(int i = 0; i < n; i++) {
-        fprintf(saida, "P%d  ", i+1);
-    }
+    for(int i = 0; i < n; i++) fprintf(saida, "P%d  ", i+1);
     fprintf(saida, "\n");
 
+    int atual = -1, anterior = -1;                  // guarda o processo atual e o anterior
+    int completos = 0;                              // contador de processos completos
     while(completos != n) {                         // enquanto ainda há processos que não foram completados
-        int atual = escolheProcesso(n, tempo, p, finalizados, tempoRestante);
+        atual = escolheProcesso(n, tempo, p, finalizados, tempoRestante);
         imprimeDiagrama(saida, tempo, atual, n);
-        /*
-          precisa "executar" os processos (aumenta o contador de tempo e diminui o tempo restante do processo)
-          e outros detalhezinhos (contar o número de trocas de contexto e etc)
-          parâmetros que precisam ser impressos:
-          tempo de vida = tempo de finalização - tempo de criação
-          tempo de espera = tempo de vida - tempo de duração
-        */
+        
+        if(atual != anterior) trocas++;
+
+        if(atual != -1) {                           // se há um processo em execução
+            tempoRestante[atual]--;                 // diminui o tempo restante do processo atual
+            tempo++;                                // aumenta o contador de tempo
+            if(tempoRestante[atual] == 0) {         // se o processo foi finalizado
+                p[atual].vida = tempo - p[atual].criacao;
+                p[atual].espera = p[atual].vida - p[atual].duracao;
+                finalizados[atual] = 1;
+                completos++;
+            }
+        } else tempo++;                             // aumenta o contador de tempo
+
+        anterior = atual;
     }
     
-    // escrevendo no arquivo de saída
+    // imprime as informações de tempo de vida, tempo de espera e número de trocas de contexto
     fprintf(saida, "\n|    | Tempo de vida | Tempo de espera |\n");
     for(int i = 0; i < n; i++) {
-        fprintf(saida, "| P%d |       %d       |        %d        |\n", i, p[i].vida, p[i].espera);
+        if(p[i].vida > 10) {
+            if(p[i].espera > 10)
+                fprintf(saida, "| P%d |       %d      |        %d       |\n", i+1, p[i].vida, p[i].espera);
+            else
+                fprintf(saida, "| P%d |       %d      |        %d        |\n", i+1, p[i].vida, p[i].espera);
+        } else
+            fprintf(saida, "| P%d |       %d       |        %d        |\n", i+1, p[i].vida, p[i].espera);
     }
     fprintf(saida, "\nNúmero de trocas de contexto: %d\n\n", trocas);
     fclose(saida);                                  // não precisa mais do arquivo de saída
@@ -97,21 +110,18 @@ int escolheProcesso(int n, int tempo, struct processo p[10], int finalizados[10]
 // imprime o diagrama de tempo de execução
 void imprimeDiagrama(FILE *saida, int tempo, int atual, int n) {
     if(tempo < 10) {
-        if(tempo + 1 < 10) {
+        if(tempo + 1 < 10)
             fprintf(saida, " %d- %d   ", tempo, tempo+1);
-        } else {
+        else
             fprintf(saida, " %d-%d   ", tempo, tempo+1);
-        }
-    } else {
+    } else
         fprintf(saida, "%d-%d   ", tempo, tempo+1);
-    }
 
-    for(int i=0; i<n; i++) {
-        if(atual == i) {
+    for(int i = 0; i < n; i++) {
+        if(atual == i)
             fprintf(saida, "##  ");
-        } else {
+        else
             fprintf(saida, "--  ");
-        }
     }
     fprintf(saida, "\n");
 }
