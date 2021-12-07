@@ -28,4 +28,3 @@ tempo   P1  P2  P3  P4  P5  P6
 | P6 |       2       |        1        |
 
 Número de trocas de contexto: 9
-

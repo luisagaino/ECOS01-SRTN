@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define NUM 15
+#define NUM 10
 
 struct processo {
     int criacao;    // data de criação
@@ -80,7 +80,7 @@ int main() {
         } else
             fprintf(saida, "| P%d |       %d       |        %d        |\n", i+1, p[i].vida, p[i].espera);
     }
-    fprintf(saida, "\nNúmero de trocas de contexto: %d\n\n", trocas);
+    fprintf(saida, "\nNúmero de trocas de contexto: %d", trocas);
     fclose(saida);                                  // não precisa mais do arquivo de saída
     
     return 0;
