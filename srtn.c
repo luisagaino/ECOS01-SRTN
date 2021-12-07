@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define NUM 15
+
 struct processo {
     int criacao;    // data de criação
     int duracao;    // duração em segundos
@@ -9,12 +11,12 @@ struct processo {
     int espera;     // tempo médio de espera
 };
 
-int escolheProcesso(int n, int tempo, struct processo p[10], int finalizados[10], int tempoRestante[10]);
-void imprimeDiagrama(FILE *saida, int tempo, int atual, int n, struct processo p[10], int finalizados[10]);
+int escolheProcesso(int n, int tempo, struct processo p[NUM], int finalizados[NUM], int tempoRestante[NUM]);
+void imprimeDiagrama(FILE *saida, int tempo, int atual, int n, struct processo p[NUM], int finalizados[NUM]);
 
 int main() {
     FILE *entrada, *saida;                          // arquivos de entrada e saida
-    struct processo p[10];                          // teremos até 10 processos nessa simulação
+    struct processo p[NUM];                         // teremos até uma quantidade limitada de processos nessa simulação
     int trocas = 0;                                 // número de trocas de contexto
     int tempo = 0;                                  // contador de tempo
 
@@ -25,9 +27,9 @@ int main() {
     } 
 
     int n = 0;                                      // para contar o número de processos dentro do arquivo
-    int finalizados[10];                            // marca quais processos foram finalizados
-    int tempoRestante[10];                          // marca quanto tempo falta para finalizar um processo
-    for(int i = 0; i < 10; i++) {                   // salva as informações dos processos em um vetor
+    int finalizados[NUM];                           // marca quais processos foram finalizados
+    int tempoRestante[NUM];                         // marca quanto tempo falta para finalizar um processo
+    for(int i = 0; i < NUM; i++) {                  // salva as informações dos processos em um vetor
         fscanf(entrada, "%d", &p[i].criacao);
         fscanf(entrada, "%d", &p[i].duracao);
         fscanf(entrada, "%d", &p[i].prioridade);
@@ -85,7 +87,7 @@ int main() {
 }
 
 // para escolher o processo que será executado
-int escolheProcesso(int n, int tempo, struct processo p[10], int finalizados[10], int tempoRestante[10]) {                      
+int escolheProcesso(int n, int tempo, struct processo p[NUM], int finalizados[NUM], int tempoRestante[NUM]) {                      
     int atual = -1, tmp = 9999;
         for(int i = 0; i < n; i++) {
             // se o processo já foi criado mas ainda não foi finalizado
@@ -110,7 +112,7 @@ int escolheProcesso(int n, int tempo, struct processo p[10], int finalizados[10]
 }
 
 // imprime o diagrama de tempo de execução
-void imprimeDiagrama(FILE *saida, int tempo, int atual, int n, struct processo p[10], int finalizados[10]) {
+void imprimeDiagrama(FILE *saida, int tempo, int atual, int n, struct processo p[NUM], int finalizados[NUM]) {
     if(tempo < 10) {
         if(tempo + 1 < 10)
             fprintf(saida, " %d- %d   ", tempo, tempo+1);
@@ -122,11 +124,12 @@ void imprimeDiagrama(FILE *saida, int tempo, int atual, int n, struct processo p
     for(int i = 0; i < n; i++) {
         if(atual == i)
             fprintf(saida, "##  ");
-        else
+        else {
             if((p[i].criacao <= tempo) && (finalizados[i] == 0))
                 fprintf(saida, "--  ");
             else
                 fprintf(saida, "    ");
+        }
     }
     fprintf(saida, "\n");
 }
