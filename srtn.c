@@ -122,11 +122,12 @@ void imprimeDiagrama(FILE *saida, int tempo, int atual, int n, struct processo p
     for(int i = 0; i < n; i++) {
         if(atual == i)
             fprintf(saida, "##  ");
-        else
+        else {
             if((p[i].criacao <= tempo) && (finalizados[i] == 0))
                 fprintf(saida, "--  ");
             else
                 fprintf(saida, "    ");
+        }
     }
     fprintf(saida, "\n");
 }
