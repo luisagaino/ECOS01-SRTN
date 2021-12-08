@@ -19,6 +19,7 @@ int main() {
     struct processo p[NUM];                         // teremos até uma quantidade limitada de processos nessa simulação
     int trocas = 0;                                 // número de trocas de contexto
     int tempo = 0;                                  // contador de tempo
+    float mediaVida = 0, mediaEspera = 0;                     // para calcular o tempo médio de vida e de espera
 
     entrada = fopen("in.txt", "r");                 // abre arquivo de entrada para ler os dados
     if(entrada == NULL) {
@@ -59,8 +60,10 @@ int main() {
             if(tempoRestante[atual] == 0) {         // se o processo foi finalizado
                 // tempo de vida = tempo atual - data de criação 
                 p[atual].vida = tempo - p[atual].criacao;
+                mediaVida += p[atual].vida;
                 // tempo de espera = tempo de vida - tempo de duração
                 p[atual].espera = p[atual].vida - p[atual].duracao;
+                mediaEspera += p[atual].espera;
                 finalizados[atual] = 1;             // adiciona na lista de finalizados
                 completos++;
             }
@@ -81,6 +84,8 @@ int main() {
             fprintf(saida, "| P%d |       %d       |        %d        |\n", i+1, p[i].vida, p[i].espera);
     }
     fprintf(saida, "\nNúmero de trocas de contexto: %d", trocas);
+    fprintf(saida, "\nTempo médio de vida: %.2f", mediaVida/n);
+    fprintf(saida, "\nTempo médio de espera: %.2f", mediaEspera/n);
     fclose(saida);                                  // não precisa mais do arquivo de saída
     
     return 0;

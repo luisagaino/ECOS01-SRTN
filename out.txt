@@ -28,3 +28,5 @@ tempo   P1  P2  P3  P4  P5  P6
 | P6 |       2       |        1        |
 
 Número de trocas de contexto: 9
+Tempo médio de vida: 7.17
+Tempo médio de espera: 4.00
